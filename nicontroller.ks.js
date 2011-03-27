@@ -5,7 +5,7 @@ var PLUGIN_INFO =
     <name lang="ja">ニコニコ動画コントローラー</name>
     <description>Control Niconico Douga via KeySnail</description>
     <description lang="ja">ニコニコ動画をKeySnailから操作</description>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <updateURL>http://github.com/tkosaka/keysnail-plugin/raw/master/nicontroller.ks.js</updateURL>
     <iconURL></iconURL>
     <author mail="tomohiko.kosaka@gmail.com" homepage="http://tkosaka.blogspot.com/">Tomohiko KOSAKA</author>
@@ -37,7 +37,7 @@ var PLUGIN_INFO =
 
         You can execute commands of nico* to manipulate the niconico player.
         See the above explanotions of each commands.
-            
+
         Or, you can set keybinds to each commands. It is recommended to
         install site-local-keymap.ks.js and put them in the PRESERVE section in
         your init file.
@@ -65,7 +65,7 @@ var PLUGIN_INFO =
         would be useful with a prefix argument
         e.g., C-u 10 s will seek forward by 10 sec.
 
-=== Acknowledgement === 
+=== Acknowledgement ===
             This plugin is a port of nicontroller.js for Vimperator.
             Thanks for janus_wel, the author of nicontroller.js.
 === Caveats ===
@@ -77,7 +77,7 @@ var PLUGIN_INFO =
 
         ニコニコプレイヤーの操作用にnico*で始まるエクステがあります。
         エクステについては上記の説明をご覧下さい。
-            
+
         また、それぞれのエクステにキーをbindすることも出来ます。
         site-local-keymap.ks.jsをインストールして、
         initファイルのPRESERVE部分に下記を追加することをお勧めします。
@@ -377,13 +377,14 @@ NicoPlayerController.prototype = {
     seekBy: function(delta) {
         if(delta) {
             if(isNaN(delta)) throw new Error('assign signed number : seekBy()');
+        }else{
+            delta = this.constants.SEEKBY_DEFAULT;
         }
-        else delta = this.constants.SEEKBY_DEFAULT;
 
         var p = this._flvplayer();
         var position = p.ext_getPlayheadTime();
         position += parseInt(delta, this.constants.CARDINAL_NUMBER);
-
+        util.message(delta + "  " +position);
         p.ext_setPlayheadTime(position);
     },
 
@@ -503,11 +504,11 @@ function nicomment0 (arg) {
     try {
         let command, comment;
         [command, comment] = expandExCommand(arg);
-        
+
         comment = comment.replace(/&emsp;/g, EMSP)
             .replace(/&nbsp;/g, NBSP)
             .replace(/<LF>/g,   LF);
-        
+
         if(command) {
             controller.setValue('inputArea.MailInput.text', command);
         }
@@ -548,11 +549,11 @@ function nicoseekBy (arg) {
 }
 
 function nicoseekForward () {
-    controller.seekBy(+1);
+    nicoseekBy(+(arguments[1] || 1));
 }
 
 function nicoseekBackward () {
-    nicoseekBy(-1);
+    nicoseekBy(-(arguments[1] || 1));
 }
 
 // command register
@@ -565,19 +566,19 @@ ext.add("nicopause", nicopause,
         M({ja: '動画の再成・一時停止をトグルします',
            en: 'Toggle play/pause'}));
 
-ext.add("nicomute", nicomute, 
+ext.add("nicomute", nicomute,
         M({ja: 'ミュート状態をトグルします',
            en: 'Toggle mute'}));
 
-ext.add("nicommentvisible", nicommentvisible, 
+ext.add("nicommentvisible", nicommentvisible,
         M({ja: 'コメント表示をトグルします',
            en: 'Toggle comment visible'}));
 
-ext.add("nicorepeat", nicorepeat, 
+ext.add("nicorepeat", nicorepeat,
         M({ja: 'リピート再成をトグルします',
            en: 'Toggle repeat'}));
 
-ext.add("nicoseek", nicoseek, 
+ext.add("nicoseek", nicoseek,
         M({ja: 'シークバーをコントロールします',
            en: 'Control seek bar'}));
 
@@ -589,31 +590,31 @@ ext.add("nicoseekBackward", nicoseekBackward,
         M({ja: '動画を後方にシークします',
            en: 'Seek backward'}));
 
-ext.add("nicovolume", nicovolume, 
+ext.add("nicovolume", nicovolume,
         M({ja: 'Volumeを設定します',
            en: 'Control volume'}));
 
-ext.add("nicovolumeIncrement", nicovolumeIncrement, 
+ext.add("nicovolumeIncrement", nicovolumeIncrement,
         M({ja: 'Volumeを上げます',
            en: 'Increment volume'}));
 
-ext.add("nicovolumeDecrement", nicovolumeDecrement, 
+ext.add("nicovolumeDecrement", nicovolumeDecrement,
         M({ja: 'Volumeを下げます',
            en: 'Decrement volume'}));
 
-ext.add("nicosize", nicosize, 
+ext.add("nicosize", nicosize,
         M({ja: '動画のサイズをトグルします',
            en: 'Toggle video size'}));
 
-ext.add("nicodescription", nicodescription, 
+ext.add("nicodescription", nicodescription,
         M({ja: '動画の説明の表示をトグルします',
            en: 'Toggle expansion of the description for video'}));
 
-ext.add("nicomment", nicomment, 
+ext.add("nicomment", nicomment,
         M({ja: 'Fill comment box',
            en: 'Fill comment box'}));
 
-ext.add("nicommand", nicommand, 
+ext.add("nicommand", nicommand,
         M({ja: 'Fill command box',
            en: 'Fill command box'}));
 
