@@ -384,7 +384,6 @@ NicoPlayerController.prototype = {
         var p = this._flvplayer();
         var position = p.ext_getPlayheadTime();
         position += parseInt(delta, this.constants.CARDINAL_NUMBER);
-        util.message(delta + "  " +position);
         p.ext_setPlayheadTime(position);
     },
 
