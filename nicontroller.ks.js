@@ -5,7 +5,7 @@ var PLUGIN_INFO =
     <name lang="ja">ニコニコ動画コントローラー</name>
     <description>Control Niconico Douga via KeySnail</description>
     <description lang="ja">ニコニコ動画をKeySnailから操作</description>
-    <version>0.0.3</version>
+    <version>0.0.3.1</version>
     <updateURL>http://github.com/tkosaka/keysnail-plugin/raw/master/nicontroller.ks.js</updateURL>
     <iconURL></iconURL>
     <author mail="tomohiko.kosaka@gmail.com" homepage="http://tkosaka.blogspot.com/">Tomohiko KOSAKA</author>
@@ -43,7 +43,7 @@ var PLUGIN_INFO =
         your init file.
 
 >||
-    local["http://(www|tw|es|de|)\.nicovideo\.jp\/watch/*"] = [
+    local["http://(www|tw|es|de|)\.nicovideo\.jp\/(watch|playlist)/*"] = [
         ["i", function (ev, arg) { ext.exec("nicoinfo", arg); }],
         ["p", function (ev, arg) { ext.exec("nicopause", arg); }],
         ["m", function (ev, arg) { ext.exec("nicomute", arg); }],
@@ -83,7 +83,7 @@ var PLUGIN_INFO =
         initファイルのPRESERVE部分に下記を追加することをお勧めします。
 
 >||
-    local["http://(www|tw|es|de|)\.nicovideo\.jp\/watch/*"] = [
+    local["http://(www|tw|es|de|)\.nicovideo\.jp\/(watch|playlist)/*"] = [
         ["i", function (ev, arg) { ext.exec("nicoinfo", arg); }],
         ["p", function (ev, arg) { ext.exec("nicopause", arg); }],
         ["m", function (ev, arg) { ext.exec("nicomute", arg); }],
@@ -199,7 +199,7 @@ NicoPlayerController.prototype = {
 
         NICO_DOMAIN:    '.nicovideo.jp',
         NICO_URL:       'http://www.nicovideo.jp/',
-        WATCH_URL:      '^http://[^.]+\.nicovideo\.jp/watch/',
+        WATCH_URL:      '^http://[^.]+\.nicovideo\.jp/(watch|playlist)/',
         WATCH_PAGE:     1,
 
         FLVPLAYER_NODE_ID: 'flvplayer',
